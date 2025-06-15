@@ -1,19 +1,15 @@
 FROM python:3.11-slim
 
+# Update system packages to reduce vulnerabilities
+RUN apt-get update && apt-get upgrade -y && apt-get clean
+
 WORKDIR /app
 
 COPY main.py ./
 COPY env ./
-COPY pyproject.toml ./
-COPY README.md ./
+COPY requirements.txt ./
 
-# Установка зависимостей
-RUN pip install --upgrade pip && \
-    pip install python-dotenv && \
-    pip install -r <(pipenv lock -r 2>/dev/null || echo '') || true && \
-    pip install python-telegram-bot pytz
-
-# Экспорт переменных окружения из файла env
-RUN apt-get update && apt-get install -y dos2unix && dos2unix env
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
 CMD ["python", "main.py"]
