@@ -5,7 +5,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, JobQueue
 import dotenv
 
-# Задаём дату и время предзащиты во Владивостоке
+# Задаём дату и время защиты во Владивостоке
 VLADIVOSTOK_TZ = pytz.timezone('Asia/Vladivostok')
 TARGET_DATETIME = VLADIVOSTOK_TZ.localize(datetime(2025, 7, 7, 10, 0, 0))
 
@@ -13,11 +13,11 @@ async def countdown_message():
     now = datetime.now(VLADIVOSTOK_TZ)
     delta = TARGET_DATETIME - now
     if delta.total_seconds() <= 0:
-        return "До предзащиты осталось 0 дней 0 часов 0 минут"
+        return "До защиты осталось 0 дней 0 часов 0 минут"
     days = delta.days
     hours, remainder = divmod(delta.seconds, 3600)
     minutes, _ = divmod(remainder, 60)
-    return f"До предзащиты осталось {days} дней {hours} часа {minutes} минуты"
+    return f"До защиты осталось {days} дней {hours} часа {minutes} минуты"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = await countdown_message()
